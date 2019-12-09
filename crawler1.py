@@ -6,10 +6,11 @@ import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
 
-#df = pd.read_excel(r'C://Users//ridhi//Downloads//HealthMapData - Africa 25th May - 25th Nov.xlsx','Sheet1')
+# load csv file 
 df=pd.read_csv('C://Users//ridhi//Downloads//healthmapdata.csv',delimiter=',')
 fig = plt.figure(figsize=(12,9))
 
+# parameteres for the Basemap
 m = Basemap(projection='mill',
            llcrnrlat = -38.6,
            urcrnrlat = 39.6,
@@ -26,8 +27,8 @@ sites_lat_y = df['Lat'].tolist()
 sites_lon_x = df['Lng'].tolist()
 
 colors = ['green', 'darkblue', 'yellow', 'red', 'blue', 'orange']
-my_example_nc_file = 'C:/Users/ridhi/Downloads/Data_Analytics/DataSets/EPI/rfe2019_05.v3.nc'
-fh = Dataset(my_example_nc_file, mode='r')
+nc_file = 'C:/Users/ridhi/Downloads/Data_Analytics/DataSets/EPI/rfe2019_05.v3.nc'
+fh = Dataset(nc_file, mode='r')
 lons = fh.variables['lon'][:]
 lats = fh.variables['lat'][:]
 tmax = fh.variables['rfe'][:]
@@ -37,6 +38,7 @@ fh.close()
 
 lon, lat = np.meshgrid(lons, lats)
 xi, yi = m(lon, lat)
+
 # Plot Data
 cs = m.pcolor(xi,yi,np.squeeze(tmax))
 
@@ -49,5 +51,6 @@ m.scatter(sites_lon_x,sites_lat_y,latlon=True, s=50, c='red',marker='o', alpha=1
 
 plt.title('May 2019', fontsize=20)
 
-#plt.show()
+# show the map and save the image in a pdf file
+plt.show()
 plt.savefig('May2019.pdf') 
